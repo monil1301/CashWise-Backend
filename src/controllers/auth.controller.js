@@ -21,4 +21,34 @@ const registerUser = async (req, res) => {
     }
 };
 
-export default registerUser;
+const loginUser = async (req, res) => {
+    const { firebaseUId, email } = req.body;
+
+    try {
+        if (!firebaseUId || !email) {
+            return res.status(400).json({ message: "firebaseUId and email are required." });
+        }
+
+        const user = await User.findOne({ firebaseUId, email });
+
+        if (!user) {
+            console.log(`User not found with UID: ${firebaseUId}, email: ${email}`);
+            return res.status(404).json({ message: "User does not exist." });
+        }
+
+        // Destructure after confirming user is found
+        const { firebaseUId: uid, name, email: userEmail } = user;
+
+        return res.status(200).json({ firebaseUId: uid, name, email: userEmail });
+    } catch (error) {
+        console.error("Login User failed with error: ", error);
+        return res.status(500).json({ message: "Internal Server Error." });
+    }
+}
+
+const authController =  {
+    registerUser,
+    loginUser,
+  };
+  
+export default authController;
