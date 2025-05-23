@@ -37,9 +37,9 @@ const loginUser = async (req, res) => {
         }
 
         // Destructure after confirming user is found
-        const { firebaseUId: uid, name, email: userEmail } = user;
+        const { firebaseUId: uid, name, email: userEmail, _id } = user;
 
-        return res.status(200).json({ firebaseUId: uid, name, email: userEmail });
+        return res.status(200).json({ firebaseUId: uid, name, email: userEmail, _id });
     } catch (error) {
         console.error("Login User failed with error: ", error);
         return res.status(500).json({ message: "Internal Server Error." });
